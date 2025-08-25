@@ -1,7 +1,146 @@
 {
-  "name": "bot-engine",
-  "version": "0.1.0",
-  "main": "src/engine.js",
-  "scripts": {},
-  "dependencies": {}
+  "name": "bot-engine-api",
+  "version": "1.0.0",
+  "description": "Proprietary bot engine for lead generation and pricing calculations across multiple industries",
+  "main": "server.js",
+  "type": "module",
+  "private": true,
+  "author": "Bot Engine Development Team",
+  "license": "PROPRIETARY",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint . --ext .js --fix",
+    "lint:check": "eslint . --ext .js",
+    "security:audit": "npm audit --audit-level moderate",
+    "security:fix": "npm audit fix",
+    "build": "npm run lint && npm run test",
+    "deploy:staging": "npm run build && npm run deploy:staging:internal",
+    "deploy:production": "npm run build && npm run deploy:prod:internal",
+    "deploy:staging:internal": "echo 'Deploy to staging server'",
+    "deploy:prod:internal": "echo 'Deploy to production server'",
+    "logs:dev": "node --trace-warnings server.js",
+    "logs:prod": "node server.js | bunyan",
+    "health:check": "curl -f http://localhost:3000/health || exit 1",
+    "db:migrate": "node scripts/migrate-database.js",
+    "sheets:init": "node scripts/initialize-sheets.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^7.1.5",
+    "google-spreadsheet": "^4.1.2",
+    "google-auth-library": "^9.4.1",
+    "validator": "^13.11.0",
+    "isomorphic-dompurify": "^2.6.0",
+    "dotenv": "^16.3.1",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.56.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-security": "^1.7.1",
+    "@types/jest": "^29.5.8",
+    "bunyan": "^1.8.15"
+  },
+  "eslintConfig": {
+    "extends": [
+      "standard",
+      "plugin:security/recommended"
+    ],
+    "env": {
+      "node": true,
+      "es2022": true,
+      "jest": true
+    },
+    "rules": {
+      "no-console": "warn",
+      "security/detect-object-injection": "error",
+      "security/detect-non-literal-regexp": "error",
+      "security/detect-buffer-noassert": "error",
+      "security/detect-eval-with-expression": "error",
+      "security/detect-no-csrf-before-method-override": "error"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!server.js"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/?(*.)+(spec|test).js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/bot-engine-private.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/bot-engine-private/issues",
+    "email": "support@bot-engine.com"
+  },
+  "homepage": "https://bot-engine.com",
+  "keywords": [
+    "bot",
+    "lead-generation",
+    "pricing-engine",
+    "api",
+    "saas",
+    "private"
+  ],
+  "funding": {
+    "type": "private",
+    "url": "https://bot-engine.com/enterprise"
+  },
+  "config": {
+    "port": 3000,
+    "logLevel": "info"
+  },
+  "nodemonConfig": {
+    "watch": [
+      ".",
+      "api/",
+      "engine/"
+    ],
+    "ext": "js,json",
+    "ignore": [
+      "node_modules/",
+      "coverage/",
+      "logs/",
+      "*.test.js"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "delay": "1000"
+  },
+  "standard": {
+    "env": [
+      "node",
+      "jest"
+    ],
+    "ignore": [
+      "coverage/**"
+    ]
+  }
 }
